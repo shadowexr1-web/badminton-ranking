@@ -1,7 +1,11 @@
 {
   "mens_doubles": [
-    { "name": "Irfan / Jervis", "tournaments": 5, "points": 3, "form": "🔥 🔥 🔥", "status": "Active" },
-    { "name": "Irfan / Ray", "tournaments": 3, "points": 2, "form": "✔️ ❌ ✔️", "status": "Active" },
-    { "name": "Haikal / Ray", "tournaments": 3, "points": 1, "form": "❌ ✔️ ❌", "status": "Active" }
+    { "name": "Irfan / Jervis", "tournaments": 5, "points": 5, "form": "W W L W", "status": "Active" },
+    { "name": "Haikal / Ray", "tournaments": 4, "points": 3, "form": "L W L W", "status": "Active" },
+    { "name": "Rafiq / Raziq", "tournaments": 1, "points": 1, "form": "L W L W", "status": "Active" }
+  ],
+  "mens_singles": [
+    { "name": "Iqram", "tournaments": 0, "points": 0, "form": "W W W W", "status": "OFF" },
+    { "name": "Rafiq", "tournaments": 0, "points": 0, "form": "L L W", "status": "OFF" }
   ]
 }
