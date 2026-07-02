@@ -19,7 +19,7 @@
     <header class="bg-[#002060] text-white shadow-sm">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             
-            <!-- HOME TRIGGER 1 -->
+            <!-- HOME/REFRESH TRIGGER -->
             <button onclick="goHome()" class="flex items-center gap-3 text-left focus:outline-none group cursor-pointer">
                 <!-- KOTAK LOGO KELAB -->
                 <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-inner overflow-hidden shrink-0 group-hover:scale-105 transition duration-200">
@@ -41,7 +41,7 @@
     <!-- Main Section -->
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
         
-        <!-- SLOT KAD PROFIL HERO/WELCOME (Akan dijana oleh JS semasa Home ditekan) -->
+        <!-- SLOT KAD PROFIL HERO/WELCOME -->
         <div id="featured-profile-container" class="mb-8"></div>
         
         <!-- Header Kategori Tetap -->
@@ -89,42 +89,24 @@
         </div>
     </div>
 
-    <!-- 5RBC STYLE FULL FOOTER -->
+    <!-- 5RBC STYLE FULL FOOTER (Dah diringkaskan) -->
     <footer class="bg-[#00143a] text-slate-400 text-xs py-10 mt-12 border-t border-blue-950 font-normal">
-        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            <!-- Quick Links -->
+            <!-- Quick Links: Tinggal Rankings sahaja -->
             <div>
-                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Quick Links</h4>
+                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Navigation</h4>
                 <ul class="space-y-2 text-slate-400">
-                    <li><button onclick="goHome()" class="hover:text-white transition cursor-pointer text-left focus:outline-none">Home</button></li>
-                    <li><button onclick="goHome()" class="hover:text-white transition font-semibold text-blue-400 cursor-pointer text-left focus:outline-none">Rankings</button></li>
-                    <li><a href="#" class="hover:text-white transition">Calendar</a></li>
-                    <li><a href="#" class="hover:text-white transition">Players</a></li>
-                    <li><a href="#" class="hover:text-white transition">Match Centre</a></li>
-                    <li><a href="#" class="text-amber-400 hover:text-amber-300 font-semibold transition flex items-center gap-1">5RBC E-Shop <span class="text-[9px] bg-amber-500 text-slate-950 px-1 rounded font-bold uppercase tracking-tight">Soon</span></a></li>
+                    <li><button onclick="goHome()" class="hover:text-white transition font-semibold text-blue-400 cursor-pointer text-left focus:outline-none">Rankings Table</button></li>
                 </ul>
             </div>
 
-            <!-- Platforms -->
+            <!-- Platforms/Hub Kelab -->
             <div>
-                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Platforms & Hub</h4>
+                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Club Hub</h4>
                 <ul class="space-y-2 text-slate-400">
                     <li><a href="#" class="hover:text-white transition">5RBC Corporate Portal</a></li>
-                    <li><a href="#" class="hover:text-white transition">Shopify Merchant Console</a></li>
-                    <li><a href="#" class="hover:text-white transition">5RBC Tournament Software</a></li>
-                    <li><a href="#" class="hover:text-white transition">Club Newsletter Signup</a></li>
-                </ul>
-            </div>
-
-            <!-- Development -->
-            <div>
-                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Development & Training</h4>
-                <ul class="space-y-2 text-slate-400">
-                    <li><a href="#" class="hover:text-white transition">Smash Academy</a></li>
                     <li><a href="#" class="hover:text-white transition">Rules & Regulations</a></li>
-                    <li><a href="#" class="hover:text-white transition">Court Booking Hub</a></li>
-                    <li><a href="#" class="hover:text-white transition">Member Registration</a></li>
                 </ul>
             </div>
 
@@ -132,7 +114,7 @@
             <div>
                 <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">5RBC Club Contact</h4>
                 <p class="leading-relaxed text-slate-400 font-light mb-2">
-                    Mempunyai sebarang cadangan, aduan, atau jemputan perlawanan persahabatan (friendly match)?
+                    Mempunyai sebarang cadangan, aduan, atau jemputan perlawanan persahabatan?
                 </p>
                 <a href="mailto:irfanbinroslee@gmail.com" class="text-blue-400 hover:underline inline-block font-semibold">Hubungi Admin Kelab Sini</a>
             </div>
@@ -163,9 +145,9 @@
                 .then(response => response.json())
                 .then(data => {
                     globalData = data.mens_doubles || [];
-                    globalData.sort((a, b) => b.points - a.points); // Susun siap-siap mengikut ranking tertinggi
+                    globalData.sort((a, b) => b.points - a.points);
                     renderTable();
-                    renderFeaturedProfile(); // Panggil fungsi pamer kad profil utama kelab
+                    renderFeaturedProfile();
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -181,12 +163,11 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // FUNGSI BARU: Bina kad profil khas di halaman utama
         function renderFeaturedProfile() {
             const container = document.getElementById('featured-profile-container');
             if (globalData.length === 0) return;
 
-            const topPlayer = globalData[0]; // Ambil data gandingan Rank 1 automatik
+            const topPlayer = globalData[0];
 
             container.innerHTML = `
                 <div class="bg-gradient-to-r from-[#002060] to-[#00143a] text-white p-6 rounded border border-blue-950 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
