@@ -7,8 +7,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Guna Tailwind v3 yang stabil -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 1. SKRIP SDK SUPABASE -->
+    <!-- SKRIP SDK SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -19,8 +20,9 @@
     <header class="bg-[#002060] text-white shadow-sm sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             
-            <button onclick="showPageView('rankings')" class="flex items-center gap-3 text-left focus:outline-none group cursor-pointer">
+            <button onclick="showPageView('rankings')" class="flex items-center gap-3 text-left focus:outline-none group cursor-pointer bg-transparent border-0">
                 <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-inner overflow-hidden shrink-0 group-hover:scale-105 transition duration-200">
+                    <!-- Pastikan nama fail logo.png.PNG betul di GitHub kau bro -->
                     <img src="logo.png.PNG" alt="🏸" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="w-full h-full object-contain">
                     <span class="text-2xl hidden">🏸</span>
                 </div>
@@ -31,7 +33,7 @@
             </button>
 
             <div class="flex items-center gap-2">
-                <button onclick="showPageView('rankings')" id="nav-rankings" class="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer bg-white text-[#002060] shadow-xs">
+                <button onclick="showPageView('rankings')" id="nav-rankings" class="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer bg-white text-[#002060] shadow-sm">
                     🏆 Rankings
                 </button>
                 <button onclick="showPageView('players')" id="nav-players" class="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer text-blue-200 hover:text-white hover:bg-blue-900/40">
@@ -49,7 +51,7 @@
         <div id="view-rankings" class="space-y-6">
             <div id="featured-profile-container"></div>
             
-            <div class="bg-white p-4 rounded border border-slate-200 flex flex-col sm:flex-row gap-4 justify-between items-center shadow-xs">
+            <div class="bg-white p-4 rounded border border-slate-200 flex flex-col sm:flex-row gap-4 justify-between items-center shadow-sm">
                 <div class="flex bg-slate-100 p-1 rounded border border-slate-200/60 w-full sm:w-auto">
                     <button onclick="switchCategory('mens_doubles')" id="tab-mens_doubles" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition duration-100 cursor-pointer bg-[#002060] text-white">
                         Men's Doubles
@@ -68,7 +70,7 @@
                 <span id="active-count" class="text-xs text-slate-400 font-normal">0 Active Players</span>
             </div>
 
-            <div class="bg-white rounded border border-slate-200 shadow-xs overflow-x-auto">
+            <div class="bg-white rounded border border-slate-200 shadow-sm overflow-x-auto">
                 <table class="w-full text-left border-collapse min-w-[600px]">
                     <thead>
                         <tr class="bg-[#002060] text-white text-[11px] uppercase tracking-widest border-b border-blue-950 font-semibold">
@@ -104,11 +106,11 @@
         </div>
     </main>
 
-    <div id="profile-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+    <div id="profile-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-lg max-w-sm w-full border border-slate-200 shadow-xl overflow-hidden">
             <div class="bg-[#002060] text-white p-4 flex justify-between items-center">
                 <h3 class="font-extrabold text-base uppercase tracking-wider">Player Deep Stats</h3>
-                <button onclick="closeModal()" class="text-white hover:text-slate-300 text-xl font-bold cursor-pointer">&times;</button>
+                <button onclick="closeModal()" class="text-white hover:text-slate-300 text-xl font-bold cursor-pointer bg-transparent border-0">&times;</button>
             </div>
             <div class="p-5 space-y-4 text-slate-700">
                 <p class="text-lg font-extrabold text-[#002060]" id="modal-name">-</p>
@@ -135,7 +137,7 @@
     <script>
         // CONFIG SUPABASE KAU
         const SUPABASE_URL = "https://wocllylqpzaqafbwesny.supabase.co"; 
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvY2xseWxxcHphcWFmYndlc255Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDE1NTgsImV4cCI6MjA5ODU3NzU1OH0.OBrl7LqRnnhObkfCHAdtMIZmH1htlKc0M6oBJZmOdgk"; // Ganti dengan anon public key kau bro
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndvY2xseWxxcHphcWFmYndlc255Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDE1NTgsImV4cCI6MjA5ODU3NzU1OH0.OBrl7LqRnnhObkfCHAdtMIZmH1htlKc0M6oBJZmOdgk"; 
         
         // Cipta hubungan client Supabase
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -151,7 +153,7 @@
         document.getElementById('update-date').innerText = currentDate.toLocaleDateString('ms-MY', options);
         document.getElementById('copyright-year').innerText = currentDate.getFullYear();
 
-        // 🔄 BERKENDALI LANGSUNG DENGAN SUPABASE (MENGGANTIKAN FETCH JSON)
+        // 🔄 BERKENDALI LANGSUNG DENGAN SUPABASE
         async function loadPlayerData() {
             try {
                 // Tarik data dari table 'players' di Supabase
@@ -161,7 +163,7 @@
 
                 if (error) throw error;
 
-                // Pecahkan data secara dinamik mengikut 'category' yang kau set dekat Supabase
+                // Pecahkan data secara dinamik mengikut 'category'
                 allData.mens_singles = players.filter(p => p.category === 'mens_singles') || [];
                 allData.mens_doubles = players.filter(p => p.category === 'mens_doubles') || [];
 
@@ -181,7 +183,7 @@
         // Jalankan load data terus bila page mula dibuka
         loadPlayerData();
 
-        // KAWALAN TUKAR HALAMAN (RANKING VS BWF PLAYERS HUB)
+        // KAWALAN TUKAR HALAMAN
         function showPageView(view) {
             activeView = view;
             closeModal();
@@ -194,12 +196,12 @@
             if (view === 'rankings') {
                 viewRankings.classList.remove('hidden');
                 viewPlayers.classList.add('hidden');
-                navRankings.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer bg-white text-[#002060] shadow-xs";
+                navRankings.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer bg-white text-[#002060] shadow-sm";
                 navPlayers.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer text-blue-200 hover:text-white hover:bg-blue-900/40";
             } else {
                 viewRankings.classList.add('hidden');
                 viewPlayers.classList.remove('hidden');
-                navPlayers.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer bg-white text-[#002060] shadow-xs";
+                navPlayers.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer bg-white text-[#002060] shadow-sm";
                 navRankings.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer text-blue-200 hover:text-white hover:bg-blue-900/40";
                 renderPlayersGrid();
             }
@@ -260,7 +262,7 @@
         function renderTable() {
             const tableBody = document.getElementById('ranking-table');
             tableBody.innerHTML = '';
-            if (filteredData.length === 0) { tableBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400 font-normal">Tiada padanan nama.</td></tr>`; return; }
+            if (filteredData.length === 0) { tableBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400 font-normal">Tiada padanan nama atau data belum dimasukkan.</td></tr>`; return; }
 
             filteredData.forEach((player) => {
                 const originalData = allData[currentCategory] || [];
@@ -273,8 +275,8 @@
                 let formBadges = '';
                 if (player.form) {
                     formBadges = player.form.split(' ').map(f => {
-                        if (f === 'W') return `<span class="w-5 h-5 inline-flex items-center justify-center bg-emerald-500 text-white font-extrabold text-[9px] rounded-full mx-0.5 shadow-xs">W</span>`;
-                        if (f === 'L') return `<span class="w-5 h-5 inline-flex items-center justify-center bg-rose-500 text-white font-extrabold text-[9px] rounded-full mx-0.5 shadow-xs">L</span>`;
+                        if (f === 'W') return `<span class="w-5 h-5 inline-flex items-center justify-center bg-emerald-500 text-white font-extrabold text-[9px] rounded-full mx-0.5 shadow-sm">W</span>`;
+                        if (f === 'L') return `<span class="w-5 h-5 inline-flex items-center justify-center bg-rose-500 text-white font-extrabold text-[9px] rounded-full mx-0.5 shadow-sm">L</span>`;
                         return `<span class="w-5 h-5 inline-flex items-center justify-center bg-slate-300 text-slate-700 font-bold text-[9px] rounded-full mx-0.5">-</span>`;
                     }).join('');
                 }
@@ -282,7 +284,7 @@
                 tableBody.innerHTML += `
                     <tr class="hover:bg-slate-50/80 transition duration-100">
                         <td class="py-3 px-4 text-center whitespace-nowrap">${rankBox}${trend}</td>
-                        <td class="py-3 px-4"><button onclick="openProfileFromData('${player.name}')" class="font-semibold text-slate-800 hover:text-blue-600 hover:underline transition text-left cursor-pointer">${player.name}</button></td>
+                        <td class="py-3 px-4"><button onclick="openProfileFromData('${player.name}')" class="font-semibold text-slate-800 hover:text-blue-600 hover:underline transition text-left cursor-pointer bg-transparent border-0 p-0">${player.name}</button></td>
                         <td class="py-3 px-4 text-center text-slate-500 font-normal">${player.tournaments}</td>
                         <td class="py-3 px-4 text-center text-blue-600 font-semibold font-mono">${player.points.toLocaleString()}</td>
                         <td class="py-3 px-4 text-center tracking-wide whitespace-nowrap">${formBadges}</td>
@@ -305,7 +307,7 @@
                 const initials = player.name.split('/').map(n => n.trim().charAt(0)).join(' & ');
 
                 grid.innerHTML += `
-                    <div class="bg-white rounded border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between">
+                    <div class="bg-white rounded border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition duration-200 flex flex-col justify-between">
                         <div class="p-5 flex items-center gap-4 border-b border-slate-100 bg-gradient-to-b from-slate-50/50 to-white">
                             <div class="w-14 h-14 bg-gradient-to-br from-[#002060] to-blue-900 text-white font-extrabold text-sm rounded-full flex items-center justify-center shadow-inner shrink-0 tracking-wider">
                                 ${initials}
@@ -322,7 +324,7 @@
                                 <div><p class="text-[10px] text-slate-400 uppercase tracking-wider font-medium">Points</p><p class="font-bold text-blue-600 font-mono">${player.points.toLocaleString()}</p></div>
                                 <div><p class="text-[10px] text-slate-400 uppercase tracking-wider font-medium">Status</p><p class="font-bold text-emerald-500">${player.status || 'Active'}</p></div>
                             </div>
-                            <button onclick="openProfileFromData('${player.name}')" class="bg-[#002060] hover:bg-blue-800 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded transition cursor-pointer shadow-xs">View Stats</button>
+                            <button onclick="openProfileFromData('${player.name}')" class="bg-[#002060] hover:bg-blue-800 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded transition cursor-pointer shadow-sm">View Stats</button>
                         </div>
                     </div>
                 `;
