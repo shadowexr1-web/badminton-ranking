@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- 1. SKRIP SDK SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
     </style>
@@ -77,7 +79,11 @@
                             <th class="py-3 px-4 text-center w-36 font-semibold">Recent Form</th>
                         </tr>
                     </thead>
-                    <tbody id="ranking-table" class="divide-y divide-slate-100 text-sm"></tbody>
+                    <tbody id="ranking-table" class="divide-y divide-slate-100 text-sm">
+                        <tr>
+                            <td colspan="5" class="py-8 text-center text-slate-400 font-normal">Loading data dari Supabase...</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -94,8 +100,7 @@
                 </div>
             </div>
 
-            <div id="players-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
+            <div id="players-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
     </main>
 
@@ -126,32 +131,54 @@
         </div>
     </footer>
 
+    <!-- KOD CONFIG & JAVASCRIPT UTAMA -->
     <script>
+        // CONFIG SUPABASE KAU
+        const SUPABASE_URL = "https://wocllylqpzaqafbwesny.supabase.co"; 
+        const SUPABASE_KEY = "MASUKKAN_ANON_PUBLIC_KEY_KAU_DISINI"; // Ganti dengan anon public key kau bro
+        
+        // Cipta hubungan client Supabase
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         let allData = {}; 
         let currentCategory = 'mens_doubles';
         let filteredData = []; 
-        let activeView = 'rankings'; // 'rankings' atau 'players'
+        let activeView = 'rankings';
 
+        // Format Tarikh & Tahun
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const currentDate = new Date();
         document.getElementById('update-date').innerText = currentDate.toLocaleDateString('ms-MY', options);
         document.getElementById('copyright-year').innerText = currentDate.getFullYear();
 
-        function loadPlayerData() {
-            fetch('players.json')
-                .then(response => response.json())
-                .then(data => {
-                    allData = data;
-                    if(allData.mens_doubles) allData.mens_doubles.sort((a, b) => b.points - a.points);
-                    if(allData.mens_singles) allData.mens_singles.sort((a, b) => b.points - a.points);
-                    
-                    switchCategory(currentCategory);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+        // 🔄 BERKENDALI LANGSUNG DENGAN SUPABASE (MENGGANTIKAN FETCH JSON)
+        async function loadPlayerData() {
+            try {
+                // Tarik data dari table 'players' di Supabase
+                const { data: players, error } = await _supabase
+                    .from('players')
+                    .select('*');
+
+                if (error) throw error;
+
+                // Pecahkan data secara dinamik mengikut 'category' yang kau set dekat Supabase
+                allData.mens_singles = players.filter(p => p.category === 'mens_singles') || [];
+                allData.mens_doubles = players.filter(p => p.category === 'mens_doubles') || [];
+
+                // Sort automatik mengikut points tertinggi
+                if(allData.mens_doubles) allData.mens_doubles.sort((a, b) => b.points - a.points);
+                if(allData.mens_singles) allData.mens_singles.sort((a, b) => b.points - a.points);
+                
+                // Kemas kini paparan mengikut kategori aktif
+                switchCategory(currentCategory);
+
+            } catch (error) {
+                console.error('Ralat memuatkan data dari Supabase:', error.message);
+                document.getElementById('ranking-table').innerHTML = `<tr><td colspan="5" class="py-8 text-center text-red-500 font-bold">Gagal memuat data: ${error.message}</td></tr>`;
+            }
         }
 
+        // Jalankan load data terus bila page mula dibuka
         loadPlayerData();
 
         // KAWALAN TUKAR HALAMAN (RANKING VS BWF PLAYERS HUB)
@@ -179,16 +206,10 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function goHome() {
-            document.getElementById('search-input').value = ''; 
-            showPageView('rankings');
-        }
-
         function switchCategory(category) {
             currentCategory = category;
             document.getElementById('search-input').value = ''; 
             
-            // Update Tab Ranking View
             ['mens_doubles', 'mens_singles'].forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 if(btn) btn.className = t === category ? "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition bg-[#002060] text-white cursor-pointer" : "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition text-slate-500 hover:text-slate-800 cursor-pointer";
@@ -269,7 +290,6 @@
             });
         }
 
-        // UPGRADE UTAMA: PENJANAAN GRID KAD PROFILE PEMAIN ALA BWF
         function renderPlayersGrid() {
             const grid = document.getElementById('players-grid');
             grid.innerHTML = '';
@@ -282,12 +302,11 @@
 
             currentList.forEach((player, index) => {
                 const rank = index + 1;
-                // Ekstrak huruf awal nama pemain untuk diletakkan sebagai Avatar Placeholder yang cool
                 const initials = player.name.split('/').map(n => n.trim().charAt(0)).join(' & ');
 
                 grid.innerHTML += `
                     <div class="bg-white rounded border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between">
-                        <div class="p-5 flex items-center gap-4 border-b border-slate-100 bg-linear-to-b from-slate-50/50 to-white">
+                        <div class="p-5 flex items-center gap-4 border-b border-slate-100 bg-gradient-to-b from-slate-50/50 to-white">
                             <div class="w-14 h-14 bg-gradient-to-br from-[#002060] to-blue-900 text-white font-extrabold text-sm rounded-full flex items-center justify-center shadow-inner shrink-0 tracking-wider">
                                 ${initials}
                             </div>
