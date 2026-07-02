@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5RBC Badminton Club Rankings</title>
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;800&display=swap" rel="stylesheet">
@@ -15,12 +14,10 @@
 </head>
 <body class="bg-[#f4f6f9] text-slate-900 min-h-screen font-light flex flex-col">
 
-    <!-- Top Bar 5RBC Corporate Blue -->
-    <header class="bg-[#002060] text-white shadow-sm">
+    <header class="bg-[#002060] text-white shadow-sm sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             
-            <!-- HOME/REFRESH TRIGGER -->
-            <button onclick="goHome()" class="flex items-center gap-3 text-left focus:outline-none group cursor-pointer">
+            <button onclick="showPageView('rankings')" class="flex items-center gap-3 text-left focus:outline-none group cursor-pointer">
                 <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-inner overflow-hidden shrink-0 group-hover:scale-105 transition duration-200">
                     <img src="logo.png.PNG" alt="🏸" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="w-full h-full object-contain">
                     <span class="text-2xl hidden">🏸</span>
@@ -31,73 +28,90 @@
                 </div>
             </button>
 
-            <div class="text-xs bg-[#00143a] px-3 py-1.5 rounded border border-blue-900/50 text-slate-300 font-normal">
-                Last Updated: <span class="text-white font-semibold" id="update-date">-</span>
+            <div class="flex items-center gap-2">
+                <button onclick="showPageView('rankings')" id="nav-rankings" class="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer bg-white text-[#002060] shadow-xs">
+                    🏆 Rankings
+                </button>
+                <button onclick="showPageView('players')" id="nav-players" class="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer text-blue-200 hover:text-white hover:bg-blue-900/40">
+                    👤 BWF Players
+                </button>
+                <div class="text-[11px] bg-[#00143a] px-3 py-2 rounded border border-blue-900/50 text-slate-300 font-normal hidden sm:block">
+                    Updated: <span class="text-white font-semibold" id="update-date">-</span>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Section -->
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
         
-        <!-- SLOT KAD PROFIL HERO -->
-        <div id="featured-profile-container" class="mb-8"></div>
-        
-        <!-- UPGRADE: KAWALAN SEARCH & TAB KATEGORI -->
-        <div class="bg-white p-4 rounded border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center shadow-xs">
-            <!-- Tab Kategori -->
-            <div class="flex bg-slate-100 p-1 rounded border border-slate-200/60 w-full sm:w-auto">
-                <button onclick="switchCategory('mens_doubles')" id="tab-mens_doubles" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition cursor-pointer bg-[#002060] text-white">
-                    Men's Doubles
-                </button>
-                <button onclick="switchCategory('mens_singles')" id="tab-mens_singles" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition cursor-pointer text-slate-500 hover:text-slate-800">
-                    Men's Singles
-                </button>
-            </div>
+        <div id="view-rankings" class="space-y-6">
+            <div id="featured-profile-container"></div>
             
-            <!-- Kotak Carian Live Search -->
-            <div class="relative w-full sm:w-64">
-                <input type="text" id="search-input" oninput="handleSearch()" placeholder="Cari nama pemain..." class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-1.5 text-xs focus:outline-none focus:border-[#002060] focus:bg-white font-normal transition">
+            <div class="bg-white p-4 rounded border border-slate-200 flex flex-col sm:flex-row gap-4 justify-between items-center shadow-xs">
+                <div class="flex bg-slate-100 p-1 rounded border border-slate-200/60 w-full sm:w-auto">
+                    <button onclick="switchCategory('mens_doubles')" id="tab-mens_doubles" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition duration-100 cursor-pointer bg-[#002060] text-white">
+                        Men's Doubles
+                    </button>
+                    <button onclick="switchCategory('mens_singles')" id="tab-mens_singles" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition duration-100 cursor-pointer text-slate-500 hover:text-slate-800">
+                        Men's Singles
+                    </button>
+                </div>
+                <div class="relative w-full sm:w-64">
+                    <input type="text" id="search-input" oninput="handleSearch()" placeholder="Cari nama pemain..." class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-1.5 text-xs focus:outline-none focus:border-[#002060] focus:bg-white font-normal transition">
+                </div>
+            </div>
+
+            <div class="border-b border-slate-200 pb-3 flex justify-between items-center">
+                <h2 id="category-title" class="text-xl font-extrabold text-[#002060] uppercase tracking-tight">Men's Doubles Standings</h2>
+                <span id="active-count" class="text-xs text-slate-400 font-normal">0 Active Players</span>
+            </div>
+
+            <div class="bg-white rounded border border-slate-200 shadow-xs overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[600px]">
+                    <thead>
+                        <tr class="bg-[#002060] text-white text-[11px] uppercase tracking-widest border-b border-blue-950 font-semibold">
+                            <th class="py-3 px-4 text-center w-24 font-semibold">Rank</th>
+                            <th class="py-3 px-4 font-semibold">Player / Pair Name</th>
+                            <th class="py-3 px-4 text-center w-32 font-semibold">Tournaments</th>
+                            <th class="py-3 px-4 text-center w-36 font-semibold">Points</th>
+                            <th class="py-3 px-4 text-center w-36 font-semibold">Recent Form</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ranking-table" class="divide-y divide-slate-100 text-sm"></tbody>
+                </table>
             </div>
         </div>
 
-        <!-- Header Kategori Tetap -->
-        <div class="border-b border-slate-200 pb-3 mb-6 flex justify-between items-center">
-            <h2 id="category-title" class="text-xl font-extrabold text-[#002060] uppercase tracking-tight">Men's Doubles Standings</h2>
-            <span id="active-count" class="text-xs text-slate-400 font-normal">0 Active Players</span>
-        </div>
+        <div id="view-players" class="hidden space-y-6">
+            <div class="border-b border-slate-200 pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-xl font-extrabold text-[#002060] uppercase tracking-tight">5RBC Players Hub</h2>
+                    <p class="text-xs text-slate-400 font-normal">Kenali profile bintang-bintang handal kelab 5RBC</p>
+                </div>
+                <div class="flex bg-slate-100 p-1 rounded border border-slate-200/60 w-full sm:w-auto">
+                    <button onclick="switchCategory('mens_doubles')" id="player-tab-mens_doubles" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition bg-[#002060] text-white cursor-pointer">Doubles</button>
+                    <button onclick="switchCategory('mens_singles')" id="player-tab-mens_singles" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition text-slate-500 hover:text-slate-800 cursor-pointer">Singles</button>
+                </div>
+            </div>
 
-        <!-- Ranking Table Container -->
-        <div class="bg-white rounded border border-slate-200 shadow-xs overflow-x-auto">
-            <table class="w-full text-left border-collapse min-w-[600px]">
-                <thead>
-                    <tr class="bg-[#002060] text-white text-[11px] uppercase tracking-widest border-b border-blue-950 font-semibold">
-                        <th class="py-3 px-4 text-center w-24 font-semibold">Rank</th>
-                        <th class="py-3 px-4 font-semibold">Player / Pair Name</th>
-                        <th class="py-3 px-4 text-center w-32 font-semibold">Tournaments</th>
-                        <th class="py-3 px-4 text-center w-36 font-semibold">Points</th>
-                        <th class="py-3 px-4 text-center w-36 font-semibold">Recent Form</th>
-                    </tr>
-                </thead>
-                <tbody id="ranking-table" class="divide-y divide-slate-100 text-sm">
-                    <!-- Data masuk guna JS -->
-                </tbody>
-            </table>
+            <div id="players-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
         </div>
     </main>
 
-    <!-- PLAYER PROFILE MODAL -->
     <div id="profile-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-lg max-w-sm w-full border border-slate-200 shadow-xl overflow-hidden">
             <div class="bg-[#002060] text-white p-4 flex justify-between items-center">
-                <h3 class="font-extrabold text-base uppercase tracking-wider">Player Info</h3>
+                <h3 class="font-extrabold text-base uppercase tracking-wider">Player Deep Stats</h3>
                 <button onclick="closeModal()" class="text-white hover:text-slate-300 text-xl font-bold cursor-pointer">&times;</button>
             </div>
-            <div class="p-5 space-y-3 text-slate-700">
+            <div class="p-5 space-y-4 text-slate-700">
                 <p class="text-lg font-extrabold text-[#002060]" id="modal-name">-</p>
-                <div class="border-t border-slate-100 pt-3 grid grid-cols-2 gap-2 text-xs">
-                    <span class="text-slate-400 font-normal">Team Code:</span> <span class="font-semibold text-slate-800" id="modal-code">5RBC-TEAM</span>
+                <div class="border-t border-slate-100 pt-3 grid grid-cols-2 gap-y-3 gap-x-2 text-xs">
+                    <span class="text-slate-400 font-normal">Team Code:</span> <span class="font-semibold text-slate-800" id="modal-code">5RBC-OFFICIAL</span>
                     <span class="text-slate-400 font-normal">Status:</span> <span class="font-semibold text-slate-800" id="modal-status">-</span>
+                    <span class="text-slate-400 font-normal">Total Points:</span> <span class="font-semibold text-blue-600 font-mono" id="modal-points">-</span>
+                    <span class="text-slate-400 font-normal">Tournaments:</span> <span class="font-semibold text-slate-800" id="modal-tournaments">-</span>
                 </div>
             </div>
             <div class="bg-slate-50 px-4 py-3 text-right border-t border-slate-100">
@@ -106,38 +120,17 @@
         </div>
     </div>
 
-    <!-- FOOTER -->
     <footer class="bg-[#00143a] text-slate-400 text-xs py-10 mt-12 border-t border-blue-950 font-normal">
-        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Navigation</h4>
-                <ul class="space-y-2 text-slate-400">
-                    <li><button onclick="goHome()" class="hover:text-white transition font-semibold text-blue-400 cursor-pointer text-left focus:outline-none">Rankings Table</button></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Club Hub</h4>
-                <ul class="space-y-2 text-slate-400">
-                    <li><a href="#" class="hover:text-white transition">5RBC Corporate Portal</a></li>
-                    <li><a href="#" class="hover:text-white transition">Rules & Regulations</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">5RBC Club Contact</h4>
-                <p class="leading-relaxed text-slate-400 font-light mb-2">Mempunyai sebarang cadangan atau aduan?</p>
-                <a href="mailto:irfanbinroslee@gmail.com" class="text-blue-400 hover:underline inline-block font-semibold">Hubungi Admin Kelab Sini</a>
-            </div>
-        </div>
-        <div class="max-w-6xl mx-auto px-4 mt-8 pt-6 border-t border-slate-800/60 text-[11px] text-slate-500 flex flex-col md:flex-row justify-between gap-6">
+        <div class="max-w-6xl mx-auto px-4 mt-2 text-center text-slate-500">
             <p>© Copyright <span id="copyright-year">2026</span> 5RBC Badminton Club. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- JAVASCRIPT SECTION -->
     <script>
-        let allData = {}; // Memegang data penuh daripada JSON
+        let allData = {}; 
         let currentCategory = 'mens_doubles';
-        let filteredData = []; // Data yang telah ditapis mengikut carian
+        let filteredData = []; 
+        let activeView = 'rankings'; // 'rankings' atau 'players'
 
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const currentDate = new Date();
@@ -149,7 +142,6 @@
                 .then(response => response.json())
                 .then(data => {
                     allData = data;
-                    // Pastikan susunan data sentiasa dari point tertinggi
                     if(allData.mens_doubles) allData.mens_doubles.sort((a, b) => b.points - a.points);
                     if(allData.mens_singles) allData.mens_singles.sort((a, b) => b.points - a.points);
                     
@@ -157,36 +149,54 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    document.getElementById('ranking-table').innerHTML = `<tr><td colspan="5" class="py-8 text-center text-red-500 font-semibold">Gagal memuatkan data. Sila check fail players.json!</td></tr>`;
                 });
         }
 
         loadPlayerData();
 
-        function goHome() {
-            document.getElementById('search-input').value = ''; 
+        // KAWALAN TUKAR HALAMAN (RANKING VS BWF PLAYERS HUB)
+        function showPageView(view) {
+            activeView = view;
             closeModal();
-            loadPlayerData();
+            
+            const viewRankings = document.getElementById('view-rankings');
+            const viewPlayers = document.getElementById('view-players');
+            const navRankings = document.getElementById('nav-rankings');
+            const navPlayers = document.getElementById('nav-players');
+
+            if (view === 'rankings') {
+                viewRankings.classList.remove('hidden');
+                viewPlayers.classList.add('hidden');
+                navRankings.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer bg-white text-[#002060] shadow-xs";
+                navPlayers.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer text-blue-200 hover:text-white hover:bg-blue-900/40";
+            } else {
+                viewRankings.classList.add('hidden');
+                viewPlayers.classList.remove('hidden');
+                navPlayers.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer bg-white text-[#002060] shadow-xs";
+                navRankings.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider rounded transition duration-150 cursor-pointer text-blue-200 hover:text-white hover:bg-blue-900/40";
+                renderPlayersGrid();
+            }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Fungsi tukar kategori tab
+        function goHome() {
+            document.getElementById('search-input').value = ''; 
+            showPageView('rankings');
+        }
+
         function switchCategory(category) {
             currentCategory = category;
-            document.getElementById('search-input').value = ''; // Reset kotak carian bila tukar tab
+            document.getElementById('search-input').value = ''; 
             
-            // Tukar rupa bentuk butang tab aktif
-            const tabs = ['mens_doubles', 'mens_singles'];
-            tabs.forEach(t => {
+            // Update Tab Ranking View
+            ['mens_doubles', 'mens_singles'].forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
-                if (t === category) {
-                    btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition duration-100 cursor-pointer bg-[#002060] text-white";
-                } else {
-                    btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition duration-100 cursor-pointer text-slate-500 hover:text-slate-800";
-                }
+                if(btn) btn.className = t === category ? "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition bg-[#002060] text-white cursor-pointer" : "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition text-slate-500 hover:text-slate-800 cursor-pointer";
+                
+                const pBtn = document.getElementById(`player-tab-${t}`);
+                if(pBtn) pBtn.className = t === category ? "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition bg-[#002060] text-white cursor-pointer" : "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition text-slate-500 hover:text-slate-800 cursor-pointer";
             });
 
-            // Kemas kini tajuk seksyen
             document.getElementById('category-title').innerText = category === 'mens_doubles' ? "Men's Doubles Standings" : "Men's Singles Standings";
 
             filteredData = allData[category] || [];
@@ -194,13 +204,12 @@
 
             renderFeaturedProfile();
             renderTable();
+            if(activeView === 'players') renderPlayersGrid();
         }
 
-        // Fungsi Carian Pemain (Live Search)
         function handleSearch() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const originalData = allData[currentCategory] || [];
-            
             filteredData = originalData.filter(player => player.name.toLowerCase().includes(query));
             renderTable();
         }
@@ -208,35 +217,20 @@
         function renderFeaturedProfile() {
             const container = document.getElementById('featured-profile-container');
             const originalData = allData[currentCategory] || [];
-            if (originalData.length === 0) {
-                container.innerHTML = '';
-                return;
-            }
+            if (originalData.length === 0) { container.innerHTML = ''; return; }
 
-            const topPlayer = originalData[0]; // Nombor 1 yang sebenar daripada fail JSON
-
+            const topPlayer = originalData[0];
             container.innerHTML = `
                 <div class="bg-gradient-to-r from-[#002060] to-[#00143a] text-white p-6 rounded border border-blue-900/50 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
                     <div class="space-y-2 text-center md:text-left">
-                        <div class="inline-flex items-center gap-1.5 bg-blue-500 text-white font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
-                            👑 Current No.1
-                        </div>
+                        <div class="inline-flex items-center gap-1.5 bg-blue-500 text-white font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider animate-pulse">👑 Current No.1</div>
                         <h3 class="text-xl md:text-2xl font-extrabold tracking-tight">${topPlayer.name}</h3>
                         <p class="text-xs text-blue-200 font-normal">Status: <span class="text-emerald-400 font-semibold">${topPlayer.status || 'Active'}</span></p>
                     </div>
                     <div class="flex gap-6 text-center shrink-0 border-t border-blue-900 md:border-t-0 md:border-l border-blue-900/50 pt-4 md:pt-0 md:pl-6 w-full md:w-auto justify-around md:justify-end">
-                        <div>
-                            <p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Points</p>
-                            <p class="text-xl font-extrabold font-mono text-blue-400">${topPlayer.points.toLocaleString()}</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Tournaments</p>
-                            <p class="text-xl font-extrabold font-mono">${topPlayer.tournaments}</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Recent Form</p>
-                            <p class="text-xl font-extrabold tracking-wide text-emerald-400">${topPlayer.form ? topPlayer.form.split(' ')[0] || 'W' : 'W'}</p>
-                        </div>
+                        <div><p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Points</p><p class="text-xl font-extrabold font-mono text-blue-400">${topPlayer.points.toLocaleString()}</p></div>
+                        <div><p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Tournaments</p><p class="text-xl font-extrabold font-mono">${topPlayer.tournaments}</p></div>
+                        <div><p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Recent Form</p><p class="text-xl font-extrabold tracking-wide text-emerald-400">${topPlayer.form ? topPlayer.form.split(' ')[0] || 'W' : 'W'}</p></div>
                     </div>
                 </div>
             `;
@@ -245,58 +239,74 @@
         function renderTable() {
             const tableBody = document.getElementById('ranking-table');
             tableBody.innerHTML = '';
+            if (filteredData.length === 0) { tableBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400 font-normal">Tiada padanan nama.</td></tr>`; return; }
 
-            if (filteredData.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400 font-normal">Tiada padanan nama pemain ditemui.</td></tr>`;
-                return;
-            }
-
-            filteredData.forEach((player, index) => {
-                // Mencari rank sebenar berdasarkan data asal, bukannya index hasil tapisan carian
+            filteredData.forEach((player) => {
                 const originalData = allData[currentCategory] || [];
                 const rank = originalData.findIndex(p => p.name === player.name) + 1;
                 
-                let rankBox = '';
-                if (rank === 1) {
-                    // Kotak w-10 dengan flex center supaya 👑1 kelihatan sebaris dan kemas
-                    rankBox = `<span class="bg-[#002060] text-white font-semibold text-xs px-1 py-1 rounded inline-flex items-center justify-center w-10 text-center shadow-sm">👑1</span>`;
-                } else if (rank <= 3) {
-                    // Rank 2 & 3 kekal mengekalkan kotak navy blue berukuran w-10
-                    rankBox = `<span class="bg-[#002060] text-white font-semibold text-xs px-1 py-1 rounded inline-flex items-center justify-center w-10 text-center shadow-sm">${rank}</span>`;
-                } else {
-                    // Rank 4 ke bawah menggunakan zon lebar w-10 kosong supaya teks lajur seterusnya kekal lurus
-                    rankBox = `<span class="text-slate-400 font-normal inline-block w-10 text-center">${rank}</span>`;
-                }
-
+                let rankBox = rank === 1 ? `<span class="bg-[#002060] text-white font-semibold text-xs px-1 py-1 rounded inline-flex items-center justify-center w-10 text-center shadow-sm">👑1</span>` : (rank <= 3 ? `<span class="bg-[#002060] text-white font-semibold text-xs px-1 py-1 rounded inline-flex items-center justify-center w-10 text-center shadow-sm">${rank}</span>` : `<span class="text-slate-400 font-normal inline-block w-10 text-center">${rank}</span>`);
                 let trend = rank % 2 === 0 ? '<span class="text-emerald-500 text-[10px] ml-1.5 font-bold">▲</span>' : '<span class="text-rose-500 text-[10px] ml-1.5 font-bold">▼</span>';
                 if (rank === 1) trend = ''; 
 
                 let formBadges = '';
                 if (player.form) {
-                    const formArray = player.form.split(' ');
-                    formBadges = formArray.map(f => {
+                    formBadges = player.form.split(' ').map(f => {
                         if (f === 'W') return `<span class="w-5 h-5 inline-flex items-center justify-center bg-emerald-500 text-white font-extrabold text-[9px] rounded-full mx-0.5 shadow-xs">W</span>`;
                         if (f === 'L') return `<span class="w-5 h-5 inline-flex items-center justify-center bg-rose-500 text-white font-extrabold text-[9px] rounded-full mx-0.5 shadow-xs">L</span>`;
                         return `<span class="w-5 h-5 inline-flex items-center justify-center bg-slate-300 text-slate-700 font-bold text-[9px] rounded-full mx-0.5">-</span>`;
                     }).join('');
                 }
 
-                const row = `
+                tableBody.innerHTML += `
                     <tr class="hover:bg-slate-50/80 transition duration-100">
                         <td class="py-3 px-4 text-center whitespace-nowrap">${rankBox}${trend}</td>
-                        <td class="py-3 px-4">
-                            <button onclick="openProfileFromData('${player.name}')" class="font-semibold text-slate-800 hover:text-blue-600 hover:underline transition text-left cursor-pointer">
-                                ${player.name}
-                            </button>
-                        </td>
+                        <td class="py-3 px-4"><button onclick="openProfileFromData('${player.name}')" class="font-semibold text-slate-800 hover:text-blue-600 hover:underline transition text-left cursor-pointer">${player.name}</button></td>
                         <td class="py-3 px-4 text-center text-slate-500 font-normal">${player.tournaments}</td>
-                        <td class="py-3 px-4 text-center text-blue-600 font-semibold font-mono">
-                            ${player.points.toLocaleString()}
-                        </td>
+                        <td class="py-3 px-4 text-center text-blue-600 font-semibold font-mono">${player.points.toLocaleString()}</td>
                         <td class="py-3 px-4 text-center tracking-wide whitespace-nowrap">${formBadges}</td>
-                    </tr>
+                    </tr>`;
+            });
+        }
+
+        // UPGRADE UTAMA: PENJANAAN GRID KAD PROFILE PEMAIN ALA BWF
+        function renderPlayersGrid() {
+            const grid = document.getElementById('players-grid');
+            grid.innerHTML = '';
+            const currentList = allData[currentCategory] || [];
+
+            if(currentList.length === 0) {
+                grid.innerHTML = `<p class="text-slate-400 text-sm">Tiada pemain ditemui.</p>`;
+                return;
+            }
+
+            currentList.forEach((player, index) => {
+                const rank = index + 1;
+                // Ekstrak huruf awal nama pemain untuk diletakkan sebagai Avatar Placeholder yang cool
+                const initials = player.name.split('/').map(n => n.trim().charAt(0)).join(' & ');
+
+                grid.innerHTML += `
+                    <div class="bg-white rounded border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition duration-200 flex flex-col justify-between">
+                        <div class="p-5 flex items-center gap-4 border-b border-slate-100 bg-linear-to-b from-slate-50/50 to-white">
+                            <div class="w-14 h-14 bg-gradient-to-br from-[#002060] to-blue-900 text-white font-extrabold text-sm rounded-full flex items-center justify-center shadow-inner shrink-0 tracking-wider">
+                                ${initials}
+                            </div>
+                            <div class="space-y-1">
+                                <span class="bg-slate-100 text-slate-700 text-[10px] font-bold uppercase px-2 py-0.5 rounded tracking-wide">Rank #${rank}</span>
+                                <h4 class="font-extrabold text-slate-800 leading-tight">${player.name}</h4>
+                                <p class="text-[11px] text-slate-400">Malaysia 🇲🇾</p>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 bg-slate-50/50 flex justify-between items-center text-xs">
+                            <div class="flex gap-4">
+                                <div><p class="text-[10px] text-slate-400 uppercase tracking-wider font-medium">Points</p><p class="font-bold text-blue-600 font-mono">${player.points.toLocaleString()}</p></div>
+                                <div><p class="text-[10px] text-slate-400 uppercase tracking-wider font-medium">Status</p><p class="font-bold text-emerald-500">${player.status || 'Active'}</p></div>
+                            </div>
+                            <button onclick="openProfileFromData('${player.name}')" class="bg-[#002060] hover:bg-blue-800 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded transition cursor-pointer shadow-xs">View Stats</button>
+                        </div>
+                    </div>
                 `;
-                tableBody.innerHTML += row;
             });
         }
 
@@ -307,6 +317,8 @@
             
             document.getElementById('modal-name').innerText = player.name;
             document.getElementById('modal-status').innerText = player.status || 'Active';
+            document.getElementById('modal-points').innerText = player.points.toLocaleString();
+            document.getElementById('modal-tournaments').innerText = player.tournaments;
             document.getElementById('profile-modal').classList.remove('hidden');
         }
 
