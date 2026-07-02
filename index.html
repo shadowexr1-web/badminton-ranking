@@ -4,50 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Badminton Club Rankings</title>
+    <!-- Tailwind CSS v4 -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-slate-900 text-white font-sans min-h-screen">
-    <div class="max-w-4xl mx-auto px-4 py-8">
-        <header class="text-center mb-10">
-            <h1 class="text-4xl font-extrabold text-yellow-4xl tracking-wide uppercase">🏸 BWF Style Club Ranking</h1>
-            <p class="text-slate-4xl mt-2">Sesiapa malas datang, ranking turun!</p>
-        </header>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen">
 
-        <div class="bg-slate-800 rounded-xl shadow-xl overflow-hidden border border-slate-700">
+    <!-- Header / Navbar Ala BWF (Biru Gelap) -->
+    <header class="bg-[#002060] text-white shadow-md">
+        <div class="max-w-5xl mx-auto px-4 py-5 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">🏸</span>
+                <div>
+                    <h1 class="text-xl font-black tracking-wider uppercase">CLUB RANKINGS</h1>
+                    <p class="text-xs text-blue-200 uppercase tracking-widest">BWF Style Official System</p>
+                </div>
+            </div>
+            <div class="text-center sm:text-right">
+                <span class="bg-blue-500 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                    Live Updates
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-4 py-10">
+        
+        <!-- Title Table -->
+        <div class="border-b-4 border-[#002060] pb-2 mb-6">
+            <h2 class="text-2xl font-extrabold text-[#002060] uppercase tracking-tight">
+                Men's Singles | Current Standings
+            </h2>
+        </div>
+
+        <!-- Ranking Table -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden border border-slate-200">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-slate-700 text-slate-300 uppercase text-sm border-b border-slate-600">
-                        <th class="py-4 px-6 text-center w-20">Rank</th>
+                    <tr class="bg-[#002060] text-white text-sm uppercase tracking-wider">
+                        <th class="py-4 px-6 text-center w-24">Rank</th>
                         <th class="py-4 px-6">Player Name</th>
                         <th class="py-4 px-6 text-center">Points</th>
-                        <th class="py-4 px-6 text-center">Recent Form</th>
+                        <th class="py-4 px-6 text-center w-36">Recent Form</th>
                     </tr>
                 </thead>
-                <tbody id="ranking-table">
-                    <!-- Data dari JS akan masuk sini -->
+                <tbody id="ranking-table" class="divide-y divide-slate-200">
+                    <!-- Data dari JS masuk sini -->
                 </tbody>
             </table>
         </div>
-    </div>
+    </main>
 
     <script>
-        // Ambil data dari players.json dan susun ikut points tertinggi
+        // Ambil data dari players.json
         fetch('players.json')
             .then(response => response.json())
             .then(data => {
-                // Sort points paling tinggi ke rendah
+                // Susun points paling tinggi ke rendah
                 data.sort((a, b) => b.points - a.points);
-
+                
                 const tableBody = document.getElementById('ranking-table');
                 tableBody.innerHTML = '';
 
                 data.forEach((player, index) => {
+                    const rank = index + 1;
+                    
+                    // Design khas untuk Top 3 (Petak Biru @ BWF Style)
+                    let rankDisplay = `<span class="bg-[#002060] text-white font-bold px-3 py-1.5 rounded text-base inline-block w-8 text-center">${rank}</span>`;
+                    if (rank > 3) {
+                        rankDisplay = `<span class="text-slate-500 font-bold text-lg px-3">${rank}</span>`;
+                    }
+
                     const row = `
-                        <tr class="border-b border-slate-700 hover:bg-slate-750 transition duration-200">
-                            <td class="py-4 px-6 text-center font-bold text-lg text-yellow-4xl">${index + 1}</td>
-                            <td class="py-4 px-6 font-semibold">${player.name}</td>
-                            <td class="py-4 px-6 text-center text-emerald-4xl font-mono">${player.points}</td>
-                            <td class="py-4 px-6 text-center">${player.form}</td>
+                        <tr class="hover:bg-slate-50 transition duration-150">
+                            <td class="py-4 px-6 text-center">${rankDisplay}</td>
+                            <td class="py-4 px-6 font-bold text-slate-800 text-lg">${player.name}</td>
+                            <td class="py-4 px-6 text-center text-blue-600 font-extrabold font-mono text-lg">
+                                ${player.points.toLocaleString()}
+                            </td>
+                            <td class="py-4 px-6 text-center text-sm">${player.form}</td>
                         </tr>
                     `;
                     tableBody.innerHTML += row;
