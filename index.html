@@ -180,9 +180,9 @@
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
                 if (t === category) {
-                    btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition cursor-pointer bg-[#002060] text-white";
+                    btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition duration-100 cursor-pointer bg-[#002060] text-white";
                 } else {
-                    btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition cursor-pointer text-slate-500 hover:text-slate-800";
+                    btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition duration-100 cursor-pointer text-slate-500 hover:text-slate-800";
                 }
             });
 
@@ -216,9 +216,9 @@
             const topPlayer = originalData[0]; // Nombor 1 yang sebenar daripada fail JSON
 
             container.innerHTML = `
-                <div class="bg-gradient-to-r from-[#002060] to-[#00143a] text-white p-6 rounded border border-amber-500/30 shadow-lg shadow-amber-500/5 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="bg-gradient-to-r from-[#002060] to-[#00143a] text-white p-6 rounded border border-blue-900/50 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
                     <div class="space-y-2 text-center md:text-left">
-                        <div class="inline-flex items-center gap-1.5 bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
+                        <div class="inline-flex items-center gap-1.5 bg-blue-500 text-white font-extrabold text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
                             👑 Current No.1
                         </div>
                         <h3 class="text-xl md:text-2xl font-extrabold tracking-tight">${topPlayer.name}</h3>
@@ -227,7 +227,7 @@
                     <div class="flex gap-6 text-center shrink-0 border-t border-blue-900 md:border-t-0 md:border-l border-blue-900/50 pt-4 md:pt-0 md:pl-6 w-full md:w-auto justify-around md:justify-end">
                         <div>
                             <p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Points</p>
-                            <p class="text-xl font-extrabold font-mono text-amber-400">${topPlayer.points.toLocaleString()}</p>
+                            <p class="text-xl font-extrabold font-mono text-blue-400">${topPlayer.points.toLocaleString()}</p>
                         </div>
                         <div>
                             <p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Tournaments</p>
@@ -256,11 +256,16 @@
                 const originalData = allData[currentCategory] || [];
                 const rank = originalData.findIndex(p => p.name === player.name) + 1;
                 
-                let rankBox = `<span class="bg-[#002060] text-white font-semibold text-xs px-2 py-1 rounded inline-block w-7 text-center shadow-sm">${rank}</span>`;
+                let rankBox = '';
                 if (rank === 1) {
-                    rankBox = `<span class="bg-[#002060] text-white font-semibold text-xs px-2 py-1 rounded inline-block w-7 text-center shadow-sm">👑1</span>`;
-                } else if (rank > 3) {
-                    rankBox = `<span class="text-slate-400 font-normal px-2">${rank}</span>`;
+                    // Kotak w-10 dengan flex center supaya 👑1 kelihatan sebaris dan kemas
+                    rankBox = `<span class="bg-[#002060] text-white font-semibold text-xs px-1 py-1 rounded inline-flex items-center justify-center w-10 text-center shadow-sm">👑1</span>`;
+                } else if (rank <= 3) {
+                    // Rank 2 & 3 kekal mengekalkan kotak navy blue berukuran w-10
+                    rankBox = `<span class="bg-[#002060] text-white font-semibold text-xs px-1 py-1 rounded inline-flex items-center justify-center w-10 text-center shadow-sm">${rank}</span>`;
+                } else {
+                    // Rank 4 ke bawah menggunakan zon lebar w-10 kosong supaya teks lajur seterusnya kekal lurus
+                    rankBox = `<span class="text-slate-400 font-normal inline-block w-10 text-center">${rank}</span>`;
                 }
 
                 let trend = rank % 2 === 0 ? '<span class="text-emerald-500 text-[10px] ml-1.5 font-bold">▲</span>' : '<span class="text-rose-500 text-[10px] ml-1.5 font-bold">▼</span>';
