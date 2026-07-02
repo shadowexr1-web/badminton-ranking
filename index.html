@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badminton Club Rankings</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-slate-900 text-white font-sans min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-extrabold text-yellow-4xl tracking-wide uppercase">🏸 BWF Style Club Ranking</h1>
+            <p class="text-slate-4xl mt-2">Sesiapa malas datang, ranking turun!</p>
+        </header>
+
+        <div class="bg-slate-800 rounded-xl shadow-xl overflow-hidden border border-slate-700">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-slate-700 text-slate-300 uppercase text-sm border-b border-slate-600">
+                        <th class="py-4 px-6 text-center w-20">Rank</th>
+                        <th class="py-4 px-6">Player Name</th>
+                        <th class="py-4 px-6 text-center">Points</th>
+                        <th class="py-4 px-6 text-center">Recent Form</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-table">
+                    <!-- Data dari JS akan masuk sini -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Ambil data dari players.json dan susun ikut points tertinggi
+        fetch('players.json')
+            .then(response => response.json())
+            .then(data => {
+                // Sort points paling tinggi ke rendah
+                data.sort((a, b) => b.points - a.points);
+
+                const tableBody = document.getElementById('ranking-table');
+                tableBody.innerHTML = '';
+
+                data.forEach((player, index) => {
+                    const row = `
+                        <tr class="border-b border-slate-700 hover:bg-slate-750 transition duration-200">
+                            <td class="py-4 px-6 text-center font-bold text-lg text-yellow-4xl">${index + 1}</td>
+                            <td class="py-4 px-6 font-semibold">${player.name}</td>
+                            <td class="py-4 px-6 text-center text-emerald-4xl font-mono">${player.points}</td>
+                            <td class="py-4 px-6 text-center">${player.form}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Error load data:', error));
+    </script>
+</body>
+</html>
