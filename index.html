@@ -13,13 +13,13 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-[#f4f6f9] text-slate-900 min-h-screen font-light">
+<body class="bg-[#f4f6f9] text-slate-900 min-h-screen font-light flex flex-col">
 
     <!-- Top Bar BWF Corporate Blue -->
     <header class="bg-[#002060] text-white shadow-sm">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <!-- KOTAK LOGO KELAB: Menghubungkan ke logo.png di GitHub -->
+                <!-- KOTAK LOGO KELAB: Menggunakan logo.png.PNG mengikut nama fail sebenar kau -->
                 <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-inner overflow-hidden shrink-0">
                     <img src="logo.png.PNG" alt="🏸" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="w-full h-full object-contain">
                     <span class="text-2xl hidden">🏸</span>
@@ -36,7 +36,7 @@
     </header>
 
     <!-- Main Section -->
-    <main class="max-w-6xl mx-auto px-4 py-8">
+    <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
         
         <!-- Header Kategori Tetap (Sebab semua main double) -->
         <div class="border-b border-slate-200 pb-3 mb-6 flex justify-between items-center">
@@ -83,30 +83,101 @@
         </div>
     </div>
 
+    <!-- BWF STYLE FULL FOOTER -->
+    <footer class="bg-[#00143a] text-slate-400 text-xs py-10 mt-12 border-t border-blue-950 font-normal">
+        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+            
+            <!-- Quick Links -->
+            <div>
+                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Quick Links</h4>
+                <ul class="space-y-2 text-slate-400">
+                    <li><a href="#" class="hover:text-white transition">Home</a></li>
+                    <li><a href="#" class="hover:text-white transition font-semibold text-blue-400">Rankings</a></li>
+                    <li><a href="#" class="hover:text-white transition">Calendar</a></li>
+                    <li><a href="#" class="hover:text-white transition">Players</a></li>
+                    <li><a href="#" class="hover:text-white transition">News & Media</a></li>
+                    <li><a href="#" class="hover:text-white transition">Match Centre</a></li>
+                    <li><a href="#" class="hover:text-white transition">Newsletter Signup</a></li>
+                </ul>
+            </div>
+
+            <!-- Platforms -->
+            <div>
+                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Platforms</h4>
+                <ul class="space-y-2 text-slate-400">
+                    <li><a href="#" class="hover:text-white transition">BWF Corporate</a></li>
+                    <li><a href="#" class="hover:text-white transition">HSBC BWF World Tour</a></li>
+                    <li><a href="#" class="hover:text-white transition">HSBC BWF World Tour Finals</a></li>
+                    <li><a href="#" class="hover:text-white transition">BadmintonWorld.TV</a></li>
+                    <li><a href="#" class="hover:text-white transition">BWF Thomas & Uber Cup Finals</a></li>
+                    <li><a href="#" class="hover:text-white transition">BWF World Championships</a></li>
+                    <li><a href="#" class="hover:text-white transition">BWF Sudirman Cup</a></li>
+                    <li><a href="#" class="hover:text-white transition">Tokyo 2020 Olympics</a></li>
+                </ul>
+            </div>
+
+            <!-- Confederations -->
+            <div>
+                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Development & Confederations</h4>
+                <ul class="space-y-2 text-slate-400 mb-4">
+                    <li><a href="#" class="hover:text-white transition">Shuttle Time</a></li>
+                </ul>
+                <ul class="space-y-2 text-slate-400">
+                    <li><a href="#" class="hover:text-white transition">Badminton Africa</a></li>
+                    <li><a href="#" class="hover:text-white transition">Badminton Asia</a></li>
+                    <li><a href="#" class="hover:text-white transition">Badminton Europe</a></li>
+                    <li><a href="#" class="hover:text-white transition">Badminton Oceania</a></li>
+                    <li><a href="#" class="hover:text-white transition">Badminton Pan Am</a></li>
+                </ul>
+            </div>
+
+            <!-- BWF HQ Contact -->
+            <div>
+                <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">BWF HQ Contact</h4>
+                <p class="leading-relaxed text-slate-400 font-light">
+                    Unit No. 1, Level 29<br>
+                    Naza Tower Platinum Park<br>
+                    No. 10, Persiaran KLCC<br>
+                    50088 Kuala Lumpur<br>
+                    Malaysia
+                </p>
+                <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">For all enquiries click here</a>
+            </div>
+        </div>
+
+        <!-- Bottom Footer (Copyright & Legal Teks Panjang BWF) -->
+        <div class="max-w-6xl mx-auto px-4 mt-8 pt-6 border-t border-slate-800/60 text-[11px] text-slate-500 flex flex-col md:flex-row justify-between gap-6">
+            <div class="max-w-3xl">
+                <p class="leading-relaxed">© Copyright 2021 Badminton World Federation. All rights reserved. The content of this website is the property of BWF or used under licence by BWF. No part may be copied, republished, stored, or otherwise republished or transmitted without the prior written permission of BWF. For further information, please refer to our <a href="#" class="hover:text-slate-300 underline">Terms & Conditions</a>.</p>
+            </div>
+            <div class="flex gap-2 shrink-0 items-start pt-0.5">
+                <a href="#" class="hover:text-slate-300">Privacy Policy</a> | 
+                <a href="#" class="hover:text-slate-300">Cookie Policy</a>
+            </div>
+        </div>
+    </footer>
+
     <script>
         let globalData = [];
 
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         document.getElementById('update-date').innerText = new Date().toLocaleDateString('ms-MY', options);
 
-        // Terus load data dari JSON
         fetch('players.json')
             .then(response => response.json())
             .then(data => {
-                // Sini kita terus ambik data 'mens_doubles' sahaja
                 globalData = data.mens_doubles || [];
                 renderTable();
             })
             .catch(error => {
                 console.error('Error:', error);
-                document.getElementById('ranking-table').innerHTML = `<tr><td colspan="5" class="py-8 text-center text-red-500 font-semibold">Gagal memuatkan data.</td></tr>`;
+                document.getElementById('ranking-table').innerHTML = `<tr><td colspan="5" class="py-8 text-center text-red-500 font-semibold">Gagal memuatkan data. Sila check fail players.json anda!</td></tr>`;
             });
 
         function renderTable() {
             const tableBody = document.getElementById('ranking-table');
             tableBody.innerHTML = '';
 
-            // Susun points tertinggi ke terendah
             globalData.sort((a, b) => b.points - a.points);
 
             if (globalData.length === 0) {
