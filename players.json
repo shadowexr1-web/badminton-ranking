@@ -1,11 +1,11 @@
 {
   "mens_singles": [
-    { "name": "Irfan", "tournaments": 12, "points": 75000, "form": "🔥 🔥 🔥", "age": 17, "plays": "Right handed", "status": "Active" },
-    { "name": "Ray", "tournaments": 10, "points": 68000, "form": "✔️ ❌ ✔️", "age": 18, "plays": "Right handed", "status": "Active" },
-    { "name": "Jervis", "tournaments": 8, "points": 62000, "form": "❌ ✔️ ❌", "age": 18, "plays": "Left handed", "status": "Injured" }
+    { "name": "Irfan", "tournaments": 0, "points": 0, "form": "🔥 🔥 🔥", "age": 17, "plays": "Right handed", "status": "Active" },
+    { "name": "Ray", "tournaments": 0, "points": 0, "form": "✔️ ❌ ✔️", "age": 18, "plays": "Right handed", "status": "Active" },
+    { "name": "Jervis", "tournaments": 0, "points": 0, "form": "❌ ✔️ ❌", "age": 18, "plays": "Left handed", "status": "Injured" }
   ],
   "mens_doubles": [
-    { "name": "Irfan / Jervis", "tournaments": 14, "points": 82000, "form": "🔥 🔥 🔥", "age": "18", "plays": "0", "status": "Active" },
-    { "name": "Ray / Haikal", "tournaments": 9, "points": 59000, "form": "❌ ❌ ✔️", "age": "18", "plays": "0", "status": "Active" }
+    { "name": "Irfan / Jervis", "tournaments": 0, "points": 0, "form": "🔥 🔥 🔥", "age": "18", "plays": "0", "status": "Active" },
+    { "name": "Ray / Haikal", "tournaments": 0, "points": 0, "form": "❌ ❌ ✔️", "age": "18", "plays": "0", "status": "Active" }
   ]
 }
