@@ -1,9 +1,11 @@
 {
   "mens_singles": [
-    { "name": "Irfan", "points": 75000, "form": "🔥 🔥 🔥" },
-    { "name": "Ahmad", "points": 68000, "form": "✔️ ❌ ✔️" }
+    { "name": "Irfan", "tournaments": 12, "points": 75000, "form": "🔥 🔥 🔥", "age": 20, "plays": "Right handed", "status": "Active" },
+    { "name": "Ahmad", "tournaments": 10, "points": 68000, "form": "✔️ ❌ ✔️", "age": 22, "plays": "Right handed", "status": "Active" },
+    { "name": "Ali", "tournaments": 8, "points": 62000, "form": "❌ ✔️ ❌", "age": 21, "plays": "Left handed", "status": "Injured" }
   ],
   "mens_doubles": [
-    { "name": "Irfan / Jervis", "points": 82000, "form": "🔥 🔥 🔥" }
+    { "name": "Irfan / Ahmad", "tournaments": 14, "points": 82000, "form": "🔥 🔥 🔥", "age": "-", "plays": "-", "status": "Active" },
+    { "name": "Ali / Abu", "tournaments": 9, "points": 59000, "form": "❌ ❌ ✔️", "age": "-", "plays": "-", "status": "Active" }
   ]
 }
