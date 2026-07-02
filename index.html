@@ -18,17 +18,20 @@
     <!-- Top Bar 5RBC Corporate Blue -->
     <header class="bg-[#002060] text-white shadow-sm">
         <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
+            
+            <!-- HOME TRIGGER 1 -->
+            <button onclick="goHome()" class="flex items-center gap-3 text-left focus:outline-none group cursor-pointer">
                 <!-- KOTAK LOGO KELAB -->
-                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-inner overflow-hidden shrink-0">
+                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-inner overflow-hidden shrink-0 group-hover:scale-105 transition duration-200">
                     <img src="logo.png.PNG" alt="🏸" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="w-full h-full object-contain">
                     <span class="text-2xl hidden">🏸</span>
                 </div>
                 <div>
-                    <h1 class="text-lg font-extrabold tracking-wider uppercase">OFFICIAL 5RBC RANKINGS</h1>
+                    <h1 class="text-lg font-extrabold tracking-wider uppercase group-hover:text-blue-200 transition">OFFICIAL 5RBC RANKINGS</h1>
                     <p class="text-[10px] text-blue-200 uppercase tracking-widest font-normal">The Ultimate Social Badminton League</p>
                 </div>
-            </div>
+            </button>
+
             <div class="text-xs bg-[#00143a] px-3 py-1.5 rounded border border-blue-900/50 text-slate-300 font-normal">
                 Last Updated: <span class="text-white font-semibold" id="update-date">-</span>
             </div>
@@ -37,6 +40,9 @@
 
     <!-- Main Section -->
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+        
+        <!-- SLOT KAD PROFIL HERO/WELCOME (Akan dijana oleh JS semasa Home ditekan) -->
+        <div id="featured-profile-container" class="mb-8"></div>
         
         <!-- Header Kategori Tetap -->
         <div class="border-b border-slate-200 pb-3 mb-6 flex justify-between items-center">
@@ -83,7 +89,7 @@
         </div>
     </div>
 
-    <!-- 5RBC STYLE FULL FOOTER (Dah bersih dari BWF) -->
+    <!-- 5RBC STYLE FULL FOOTER -->
     <footer class="bg-[#00143a] text-slate-400 text-xs py-10 mt-12 border-t border-blue-950 font-normal">
         <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
             
@@ -91,8 +97,8 @@
             <div>
                 <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Quick Links</h4>
                 <ul class="space-y-2 text-slate-400">
-                    <li><a href="#" class="hover:text-white transition">Home</a></li>
-                    <li><a href="#" class="hover:text-white transition font-semibold text-blue-400">Rankings</a></li>
+                    <li><button onclick="goHome()" class="hover:text-white transition cursor-pointer text-left focus:outline-none">Home</button></li>
+                    <li><button onclick="goHome()" class="hover:text-white transition font-semibold text-blue-400 cursor-pointer text-left focus:outline-none">Rankings</button></li>
                     <li><a href="#" class="hover:text-white transition">Calendar</a></li>
                     <li><a href="#" class="hover:text-white transition">Players</a></li>
                     <li><a href="#" class="hover:text-white transition">Match Centre</a></li>
@@ -132,7 +138,7 @@
             </div>
         </div>
 
-        <!-- Bottom Footer (Copyright & Legal Teks Panjang 5RBC) -->
+        <!-- Bottom Footer -->
         <div class="max-w-6xl mx-auto px-4 mt-8 pt-6 border-t border-slate-800/60 text-[11px] text-slate-500 flex flex-col md:flex-row justify-between gap-6">
             <div class="max-w-3xl">
                 <p class="leading-relaxed">© Copyright <span id="copyright-year">2026</span> 5RBC Badminton Club. All rights reserved. The content, graphics, and ranking data of this website are the property of 5RBC Badminton Club. No part may be copied, republished, stored, or otherwise transmitted without the prior written permission of the 5RBC Club Committee. For further information, please refer to our <a href="#" class="hover:text-slate-300 underline">Terms & Conditions</a>.</p>
@@ -147,28 +153,71 @@
     <script>
         let globalData = [];
 
-        // Set tarikh kemas kini automatik & tahun copyright semasa
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const currentDate = new Date();
         document.getElementById('update-date').innerText = currentDate.toLocaleDateString('ms-MY', options);
         document.getElementById('copyright-year').innerText = currentDate.getFullYear();
 
-        fetch('players.json')
-            .then(response => response.json())
-            .then(data => {
-                globalData = data.mens_doubles || [];
-                renderTable();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                document.getElementById('ranking-table').innerHTML = `<tr><td colspan="5" class="py-8 text-center text-red-500 font-semibold">Gagal memuatkan data. Sila check fail players.json anda!</td></tr>`;
-            });
+        function loadPlayerData() {
+            fetch('players.json')
+                .then(response => response.json())
+                .then(data => {
+                    globalData = data.mens_doubles || [];
+                    globalData.sort((a, b) => b.points - a.points); // Susun siap-siap mengikut ranking tertinggi
+                    renderTable();
+                    renderFeaturedProfile(); // Panggil fungsi pamer kad profil utama kelab
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('ranking-table').innerHTML = `<tr><td colspan="5" class="py-8 text-center text-red-500 font-semibold">Gagal memuatkan data. Sila check fail players.json anda!</td></tr>`;
+                });
+        }
+
+        loadPlayerData();
+
+        function goHome() {
+            closeModal();
+            loadPlayerData();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // FUNGSI BARU: Bina kad profil khas di halaman utama
+        function renderFeaturedProfile() {
+            const container = document.getElementById('featured-profile-container');
+            if (globalData.length === 0) return;
+
+            const topPlayer = globalData[0]; // Ambil data gandingan Rank 1 automatik
+
+            container.innerHTML = `
+                <div class="bg-gradient-to-r from-[#002060] to-[#00143a] text-white p-6 rounded border border-blue-950 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="space-y-2 text-center md:text-left">
+                        <div class="inline-flex items-center gap-1.5 bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            👑 Current No.1 Pair
+                        </div>
+                        <h3 class="text-xl md:text-2xl font-extrabold tracking-tight">${topPlayer.name}</h3>
+                        <p class="text-xs text-blue-200 font-normal">Team Code: <span class="text-white font-mono">5RBC-TEAM1</span> | Status: <span class="text-emerald-400 font-semibold">${topPlayer.status || 'Active'}</span></p>
+                    </div>
+                    <div class="flex gap-6 text-center shrink-0 border-t border-blue-900 md:border-t-0 md:border-l border-blue-900/50 pt-4 md:pt-0 md:pl-6 w-full md:w-auto justify-around md:justify-end">
+                        <div>
+                            <p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Points</p>
+                            <p class="text-xl font-extrabold font-mono text-amber-400">${topPlayer.points.toLocaleString()}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Tournaments</p>
+                            <p class="text-xl font-extrabold font-mono">${topPlayer.tournaments}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Recent Form</p>
+                            <p class="text-xl font-extrabold tracking-wide text-emerald-400">${topPlayer.form}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
 
         function renderTable() {
             const tableBody = document.getElementById('ranking-table');
             tableBody.innerHTML = '';
-
-            globalData.sort((a, b) => b.points - a.points);
 
             if (globalData.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400">Tiada data gandingan double.</td></tr>`;
