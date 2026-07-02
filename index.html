@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5RBC Badminton Club Rankings</title>
-    <!-- Google Fonts: Inter untuk tulisan nipis & premium ala BWF -->
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;600;800&display=swap" rel="stylesheet">
@@ -21,7 +21,6 @@
             
             <!-- HOME/REFRESH TRIGGER -->
             <button onclick="goHome()" class="flex items-center gap-3 text-left focus:outline-none group cursor-pointer">
-                <!-- KOTAK LOGO KELAB -->
                 <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center p-1 shadow-inner overflow-hidden shrink-0 group-hover:scale-105 transition duration-200">
                     <img src="logo.png.PNG" alt="🏸" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="w-full h-full object-contain">
                     <span class="text-2xl hidden">🏸</span>
@@ -41,13 +40,31 @@
     <!-- Main Section -->
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
         
-        <!-- SLOT KAD PROFIL HERO/WELCOME (Ada efek glow & pulse) -->
+        <!-- SLOT KAD PROFIL HERO -->
         <div id="featured-profile-container" class="mb-8"></div>
         
+        <!-- UPGRADE: KAWALAN SEARCH & TAB KATEGORI -->
+        <div class="bg-white p-4 rounded border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center shadow-xs">
+            <!-- Tab Kategori -->
+            <div class="flex bg-slate-100 p-1 rounded border border-slate-200/60 w-full sm:w-auto">
+                <button onclick="switchCategory('mens_doubles')" id="tab-mens_doubles" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition cursor-pointer bg-[#002060] text-white">
+                    Men's Doubles
+                </button>
+                <button onclick="switchCategory('mens_singles')" id="tab-mens_singles" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition cursor-pointer text-slate-500 hover:text-slate-800">
+                    Men's Singles
+                </button>
+            </div>
+            
+            <!-- Kotak Carian Live Search -->
+            <div class="relative w-full sm:w-64">
+                <input type="text" id="search-input" oninput="handleSearch()" placeholder="Cari nama pemain..." class="w-full bg-slate-50 border border-slate-200 rounded px-3 py-1.5 text-xs focus:outline-none focus:border-[#002060] focus:bg-white font-normal transition">
+            </div>
+        </div>
+
         <!-- Header Kategori Tetap -->
         <div class="border-b border-slate-200 pb-3 mb-6 flex justify-between items-center">
-            <h2 class="text-xl font-extrabold text-[#002060] uppercase tracking-tight">Men's Doubles Standings</h2>
-            <span class="text-xs text-slate-400 font-normal">6 Active Players</span>
+            <h2 id="category-title" class="text-xl font-extrabold text-[#002060] uppercase tracking-tight">Men's Doubles Standings</h2>
+            <span id="active-count" class="text-xs text-slate-400 font-normal">0 Active Players</span>
         </div>
 
         <!-- Ranking Table Container -->
@@ -56,7 +73,7 @@
                 <thead>
                     <tr class="bg-[#002060] text-white text-[11px] uppercase tracking-widest border-b border-blue-950 font-semibold">
                         <th class="py-3 px-4 text-center w-24 font-semibold">Rank</th>
-                        <th class="py-3 px-4 font-semibold">Pair Name</th>
+                        <th class="py-3 px-4 font-semibold">Player / Pair Name</th>
                         <th class="py-3 px-4 text-center w-32 font-semibold">Tournaments</th>
                         <th class="py-3 px-4 text-center w-36 font-semibold">Points</th>
                         <th class="py-3 px-4 text-center w-36 font-semibold">Recent Form</th>
@@ -73,7 +90,7 @@
     <div id="profile-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-lg max-w-sm w-full border border-slate-200 shadow-xl overflow-hidden">
             <div class="bg-[#002060] text-white p-4 flex justify-between items-center">
-                <h3 class="font-extrabold text-base uppercase tracking-wider">Pair Info</h3>
+                <h3 class="font-extrabold text-base uppercase tracking-wider">Player Info</h3>
                 <button onclick="closeModal()" class="text-white hover:text-slate-300 text-xl font-bold cursor-pointer">&times;</button>
             </div>
             <div class="p-5 space-y-3 text-slate-700">
@@ -89,19 +106,15 @@
         </div>
     </div>
 
-    <!-- 5RBC STYLE FULL FOOTER -->
+    <!-- FOOTER -->
     <footer class="bg-[#00143a] text-slate-400 text-xs py-10 mt-12 border-t border-blue-950 font-normal">
         <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            <!-- Quick Links -->
             <div>
                 <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Navigation</h4>
                 <ul class="space-y-2 text-slate-400">
                     <li><button onclick="goHome()" class="hover:text-white transition font-semibold text-blue-400 cursor-pointer text-left focus:outline-none">Rankings Table</button></li>
                 </ul>
             </div>
-
-            <!-- Platforms/Hub Kelab -->
             <div>
                 <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Club Hub</h4>
                 <ul class="space-y-2 text-slate-400">
@@ -109,32 +122,22 @@
                     <li><a href="#" class="hover:text-white transition">Rules & Regulations</a></li>
                 </ul>
             </div>
-
-            <!-- 5RBC Contact Info -->
             <div>
                 <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">5RBC Club Contact</h4>
-                <p class="leading-relaxed text-slate-400 font-light mb-2">
-                    Mempunyai sebarang cadangan, aduan, atau jemputan perlawanan persahabatan?
-                </p>
+                <p class="leading-relaxed text-slate-400 font-light mb-2">Mempunyai sebarang cadangan atau aduan?</p>
                 <a href="mailto:irfanbinroslee@gmail.com" class="text-blue-400 hover:underline inline-block font-semibold">Hubungi Admin Kelab Sini</a>
             </div>
         </div>
-
-        <!-- Bottom Footer -->
         <div class="max-w-6xl mx-auto px-4 mt-8 pt-6 border-t border-slate-800/60 text-[11px] text-slate-500 flex flex-col md:flex-row justify-between gap-6">
-            <div class="max-w-3xl">
-                <p class="leading-relaxed">© Copyright <span id="copyright-year">2026</span> 5RBC Badminton Club. All rights reserved. The content, graphics, and ranking data of this website are the property of 5RBC Badminton Club. No part may be copied, republished, stored, or otherwise transmitted without the prior written permission of the 5RBC Club Committee. For further information, please refer to our <a href="#" class="hover:text-slate-300 underline">Terms & Conditions</a>.</p>
-            </div>
-            <div class="flex gap-2 shrink-0 items-start pt-0.5">
-                <a href="#" class="hover:text-slate-300">Privacy Policy</a> | 
-                <a href="#" class="hover:text-slate-300">Cookie Policy</a>
-            </div>
+            <p>© Copyright <span id="copyright-year">2026</span> 5RBC Badminton Club. All rights reserved.</p>
         </div>
     </footer>
 
     <!-- JAVASCRIPT SECTION -->
     <script>
-        let globalData = [];
+        let allData = {}; // Memegang data penuh daripada JSON
+        let currentCategory = 'mens_doubles';
+        let filteredData = []; // Data yang telah ditapis mengikut carian
 
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         const currentDate = new Date();
@@ -145,39 +148,81 @@
             fetch('players.json')
                 .then(response => response.json())
                 .then(data => {
-                    globalData = data.mens_doubles || [];
-                    globalData.sort((a, b) => b.points - a.points);
-                    renderTable();
-                    renderFeaturedProfile();
+                    allData = data;
+                    // Pastikan susunan data sentiasa dari point tertinggi
+                    if(allData.mens_doubles) allData.mens_doubles.sort((a, b) => b.points - a.points);
+                    if(allData.mens_singles) allData.mens_singles.sort((a, b) => b.points - a.points);
+                    
+                    switchCategory(currentCategory);
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    document.getElementById('ranking-table').innerHTML = `<tr><td colspan="5" class="py-8 text-center text-red-500 font-semibold">Gagal memuatkan data. Sila check fail players.json anda!</td></tr>`;
+                    document.getElementById('ranking-table').innerHTML = `<tr><td colspan="5" class="py-8 text-center text-red-500 font-semibold">Gagal memuatkan data. Sila check fail players.json!</td></tr>`;
                 });
         }
 
         loadPlayerData();
 
         function goHome() {
+            document.getElementById('search-input').value = ''; 
             closeModal();
             loadPlayerData();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // Fungsi tukar kategori tab
+        function switchCategory(category) {
+            currentCategory = category;
+            document.getElementById('search-input').value = ''; // Reset kotak carian bila tukar tab
+            
+            // Tukar rupa bentuk butang tab aktif
+            const tabs = ['mens_doubles', 'mens_singles'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                if (t === category) {
+                    btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition cursor-pointer bg-[#002060] text-white";
+                } else {
+                    btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-bold rounded uppercase tracking-wider transition cursor-pointer text-slate-500 hover:text-slate-800";
+                }
+            });
+
+            // Kemas kini tajuk seksyen
+            document.getElementById('category-title').innerText = category === 'mens_doubles' ? "Men's Doubles Standings" : "Men's Singles Standings";
+
+            filteredData = allData[category] || [];
+            document.getElementById('active-count').innerText = `${filteredData.length} Active Players`;
+
+            renderFeaturedProfile();
+            renderTable();
+        }
+
+        // Fungsi Carian Pemain (Live Search)
+        function handleSearch() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const originalData = allData[currentCategory] || [];
+            
+            filteredData = originalData.filter(player => player.name.toLowerCase().includes(query));
+            renderTable();
+        }
+
         function renderFeaturedProfile() {
             const container = document.getElementById('featured-profile-container');
-            if (globalData.length === 0) return;
+            const originalData = allData[currentCategory] || [];
+            if (originalData.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
 
-            const topPlayer = globalData[0];
+            const topPlayer = originalData[0]; // Nombor 1 yang sebenar daripada fail JSON
 
             container.innerHTML = `
                 <div class="bg-gradient-to-r from-[#002060] to-[#00143a] text-white p-6 rounded border border-amber-500/30 shadow-lg shadow-amber-500/5 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div class="space-y-2 text-center md:text-left">
                         <div class="inline-flex items-center gap-1.5 bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
-                            👑 Current No.1 Pair
+                            👑 Current No.1
                         </div>
                         <h3 class="text-xl md:text-2xl font-extrabold tracking-tight">${topPlayer.name}</h3>
-                        <p class="text-xs text-blue-200 font-normal">Team Code: <span class="text-white font-mono">5RBC-TEAM1</span> | Status: <span class="text-emerald-400 font-semibold">${topPlayer.status || 'Active'}</span></p>
+                        <p class="text-xs text-blue-200 font-normal">Status: <span class="text-emerald-400 font-semibold">${topPlayer.status || 'Active'}</span></p>
                     </div>
                     <div class="flex gap-6 text-center shrink-0 border-t border-blue-900 md:border-t-0 md:border-l border-blue-900/50 pt-4 md:pt-0 md:pl-6 w-full md:w-auto justify-around md:justify-end">
                         <div>
@@ -197,20 +242,20 @@
             `;
         }
 
-        // FUNGSI RENDER TABLE YANG TELAH DI-UPGRADE (BADGE WARNA & TREND)
         function renderTable() {
             const tableBody = document.getElementById('ranking-table');
             tableBody.innerHTML = '';
 
-            if (globalData.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400">Tiada data gandingan double.</td></tr>`;
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-slate-400 font-normal">Tiada padanan nama pemain ditemui.</td></tr>`;
                 return;
             }
 
-            globalData.forEach((player, index) => {
-                const rank = index + 1;
+            filteredData.forEach((player, index) => {
+                // Mencari rank sebenar berdasarkan data asal, bukannya index hasil tapisan carian
+                const originalData = allData[currentCategory] || [];
+                const rank = originalData.findIndex(p => p.name === player.name) + 1;
                 
-                // 1. Upgrade Rupa Kotak Ranking (Rank 1 dapat Mahkota Emas)
                 let rankBox = `<span class="bg-[#002060] text-white font-semibold text-xs px-2 py-1 rounded inline-block w-7 text-center shadow-sm">${rank}</span>`;
                 if (rank === 1) {
                     rankBox = `<span class="bg-amber-500 text-slate-950 font-extrabold text-xs px-1.5 py-1 rounded inline-block w-8 text-center shadow-xs">👑 1</span>`;
@@ -218,11 +263,9 @@
                     rankBox = `<span class="text-slate-400 font-normal px-2">${rank}</span>`;
                 }
 
-                // 2. Penunjuk Trend Naik/Turun (Simulasi dinamik berdasarkan giliran index)
-                let trend = index % 2 === 0 ? '<span class="text-emerald-500 text-[10px] ml-1.5 font-bold">▲</span>' : '<span class="text-rose-500 text-[10px] ml-1.5 font-bold">▼</span>';
-                if (rank === 1) trend = ''; // Juara bertahan tiada anak panah
+                let trend = rank % 2 === 0 ? '<span class="text-emerald-500 text-[10px] ml-1.5 font-bold">▲</span>' : '<span class="text-rose-500 text-[10px] ml-1.5 font-bold">▼</span>';
+                if (rank === 1) trend = ''; 
 
-                // 3. Upgrade Recent Form Menjadi Bulatan Berwarna (W = Hijau, L = Merah)
                 let formBadges = '';
                 if (player.form) {
                     const formArray = player.form.split(' ');
@@ -237,7 +280,7 @@
                     <tr class="hover:bg-slate-50/80 transition duration-100">
                         <td class="py-3 px-4 text-center whitespace-nowrap">${rankBox}${trend}</td>
                         <td class="py-3 px-4">
-                            <button onclick="openProfile(${index})" class="font-semibold text-slate-800 hover:text-blue-600 hover:underline transition text-left cursor-pointer">
+                            <button onclick="openProfileFromData('${player.name}')" class="font-semibold text-slate-800 hover:text-blue-600 hover:underline transition text-left cursor-pointer">
                                 ${player.name}
                             </button>
                         </td>
@@ -252,8 +295,11 @@
             });
         }
 
-        function openProfile(index) {
-            const player = globalData[index];
+        function openProfileFromData(playerName) {
+            const originalData = allData[currentCategory] || [];
+            const player = originalData.find(p => p.name === playerName);
+            if(!player) return;
+            
             document.getElementById('modal-name').innerText = player.name;
             document.getElementById('modal-status').innerText = player.status || 'Active';
             document.getElementById('profile-modal').classList.remove('hidden');
