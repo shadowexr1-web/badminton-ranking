@@ -41,7 +41,7 @@
     <!-- Main Section -->
     <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
         
-        <!-- SLOT KAD PROFIL HERO/WELCOME -->
+        <!-- SLOT KAD PROFIL HERO/WELCOME (Ada efek glow & pulse) -->
         <div id="featured-profile-container" class="mb-8"></div>
         
         <!-- Header Kategori Tetap -->
@@ -55,11 +55,11 @@
             <table class="w-full text-left border-collapse min-w-[600px]">
                 <thead>
                     <tr class="bg-[#002060] text-white text-[11px] uppercase tracking-widest border-b border-blue-950 font-semibold">
-                        <th class="py-3 px-4 text-center w-20 font-semibold">Rank</th>
+                        <th class="py-3 px-4 text-center w-24 font-semibold">Rank</th>
                         <th class="py-3 px-4 font-semibold">Pair Name</th>
                         <th class="py-3 px-4 text-center w-32 font-semibold">Tournaments</th>
                         <th class="py-3 px-4 text-center w-36 font-semibold">Points</th>
-                        <th class="py-3 px-4 text-center w-32 font-semibold">Recent Form</th>
+                        <th class="py-3 px-4 text-center w-36 font-semibold">Recent Form</th>
                     </tr>
                 </thead>
                 <tbody id="ranking-table" class="divide-y divide-slate-100 text-sm">
@@ -89,11 +89,11 @@
         </div>
     </div>
 
-    <!-- 5RBC STYLE FULL FOOTER (Dah diringkaskan) -->
+    <!-- 5RBC STYLE FULL FOOTER -->
     <footer class="bg-[#00143a] text-slate-400 text-xs py-10 mt-12 border-t border-blue-950 font-normal">
         <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
             
-            <!-- Quick Links: Tinggal Rankings sahaja -->
+            <!-- Quick Links -->
             <div>
                 <h4 class="text-white font-bold mb-3 uppercase tracking-wider text-[11px]">Navigation</h4>
                 <ul class="space-y-2 text-slate-400">
@@ -132,6 +132,7 @@
         </div>
     </footer>
 
+    <!-- JAVASCRIPT SECTION -->
     <script>
         let globalData = [];
 
@@ -170,9 +171,9 @@
             const topPlayer = globalData[0];
 
             container.innerHTML = `
-                <div class="bg-gradient-to-r from-[#002060] to-[#00143a] text-white p-6 rounded border border-blue-950 shadow-md flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="bg-gradient-to-r from-[#002060] to-[#00143a] text-white p-6 rounded border border-amber-500/30 shadow-lg shadow-amber-500/5 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div class="space-y-2 text-center md:text-left">
-                        <div class="inline-flex items-center gap-1.5 bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        <div class="inline-flex items-center gap-1.5 bg-amber-500 text-slate-950 font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">
                             👑 Current No.1 Pair
                         </div>
                         <h3 class="text-xl md:text-2xl font-extrabold tracking-tight">${topPlayer.name}</h3>
@@ -189,13 +190,14 @@
                         </div>
                         <div>
                             <p class="text-[10px] text-blue-300 uppercase tracking-widest font-normal">Recent Form</p>
-                            <p class="text-xl font-extrabold tracking-wide text-emerald-400">${topPlayer.form}</p>
+                            <p class="text-xl font-extrabold tracking-wide text-emerald-400">${topPlayer.form ? topPlayer.form.split(' ')[0] || 'W' : 'W'}</p>
                         </div>
                     </div>
                 </div>
             `;
         }
 
+        // FUNGSI RENDER TABLE YANG TELAH DI-UPGRADE (BADGE WARNA & TREND)
         function renderTable() {
             const tableBody = document.getElementById('ranking-table');
             tableBody.innerHTML = '';
@@ -208,14 +210,32 @@
             globalData.forEach((player, index) => {
                 const rank = index + 1;
                 
-                let rankBox = `<span class="bg-[#002060] text-white font-semibold text-xs px-2 py-1 rounded inline-block w-7 text-center">${rank}</span>`;
-                if (rank > 3) {
+                // 1. Upgrade Rupa Kotak Ranking (Rank 1 dapat Mahkota Emas)
+                let rankBox = `<span class="bg-[#002060] text-white font-semibold text-xs px-2 py-1 rounded inline-block w-7 text-center shadow-sm">${rank}</span>`;
+                if (rank === 1) {
+                    rankBox = `<span class="bg-amber-500 text-slate-950 font-extrabold text-xs px-1.5 py-1 rounded inline-block w-8 text-center shadow-xs">👑 1</span>`;
+                } else if (rank > 3) {
                     rankBox = `<span class="text-slate-400 font-normal px-2">${rank}</span>`;
+                }
+
+                // 2. Penunjuk Trend Naik/Turun (Simulasi dinamik berdasarkan giliran index)
+                let trend = index % 2 === 0 ? '<span class="text-emerald-500 text-[10px] ml-1.5 font-bold">▲</span>' : '<span class="text-rose-500 text-[10px] ml-1.5 font-bold">▼</span>';
+                if (rank === 1) trend = ''; // Juara bertahan tiada anak panah
+
+                // 3. Upgrade Recent Form Menjadi Bulatan Berwarna (W = Hijau, L = Merah)
+                let formBadges = '';
+                if (player.form) {
+                    const formArray = player.form.split(' ');
+                    formBadges = formArray.map(f => {
+                        if (f === 'W') return `<span class="w-5 h-5 inline-flex items-center justify-center bg-emerald-500 text-white font-extrabold text-[9px] rounded-full mx-0.5 shadow-xs">W</span>`;
+                        if (f === 'L') return `<span class="w-5 h-5 inline-flex items-center justify-center bg-rose-500 text-white font-extrabold text-[9px] rounded-full mx-0.5 shadow-xs">L</span>`;
+                        return `<span class="w-5 h-5 inline-flex items-center justify-center bg-slate-300 text-slate-700 font-bold text-[9px] rounded-full mx-0.5">-</span>`;
+                    }).join('');
                 }
 
                 const row = `
                     <tr class="hover:bg-slate-50/80 transition duration-100">
-                        <td class="py-3 px-4 text-center">${rankBox}</td>
+                        <td class="py-3 px-4 text-center whitespace-nowrap">${rankBox}${trend}</td>
                         <td class="py-3 px-4">
                             <button onclick="openProfile(${index})" class="font-semibold text-slate-800 hover:text-blue-600 hover:underline transition text-left cursor-pointer">
                                 ${player.name}
@@ -225,7 +245,7 @@
                         <td class="py-3 px-4 text-center text-blue-600 font-semibold font-mono">
                             ${player.points.toLocaleString()}
                         </td>
-                        <td class="py-3 px-4 text-center tracking-wide">${player.form}</td>
+                        <td class="py-3 px-4 text-center tracking-wide whitespace-nowrap">${formBadges}</td>
                     </tr>
                 `;
                 tableBody.innerHTML += row;
