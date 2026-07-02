@@ -1,11 +1,9 @@
 {
   "mens_singles": [
     { "name": "Irfan", "points": 75000, "form": "🔥 🔥 🔥" },
-    { "name": "Ahmad", "points": 68000, "form": "✔️ ❌ ✔️" },
-    { "name": "Ali", "points": 62000, "form": "❌ ✔️ ❌" }
+    { "name": "Ahmad", "points": 68000, "form": "✔️ ❌ ✔️" }
   ],
   "mens_doubles": [
-    { "name": "Irfan / Ahmad", "points": 82000, "form": "🔥 🔥 🔥" },
-    { "name": "Ali / Abu", "points": 59000, "form": "❌ ❌ ✔️" }
+    { "name": "Irfan / Jervis", "points": 82000, "form": "🔥 🔥 🔥" }
   ]
 }
