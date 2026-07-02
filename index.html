@@ -3,92 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Badminton Club Rankings</title>
-    <!-- Tailwind CSS v4 -->
+    <title>BWF Style Club Rankings</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen">
+<body class="bg-slate-100 text-slate-900 font-sans min-h-screen">
 
-    <!-- Header / Navbar Ala BWF (Biru Gelap) -->
+    <!-- Top Bar BWF Corporate Blue -->
     <header class="bg-[#002060] text-white shadow-md">
-        <div class="max-w-5xl mx-auto px-4 py-5 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <span class="text-2xl">🏸</span>
+                <span class="text-3xl">🏸</span>
                 <div>
-                    <h1 class="text-xl font-black tracking-wider uppercase">CLUB RANKINGS</h1>
-                    <p class="text-xs text-blue-200 uppercase tracking-widest">BWF Style Official System</p>
+                    <h1 class="text-xl font-black tracking-wider uppercase">OFFICIAL CLUB RANKINGS</h1>
+                    <p class="text-xs text-blue-200 uppercase tracking-widest">Inspired by BWF World Rankings</p>
                 </div>
             </div>
-            <div class="text-center sm:text-right">
-                <span class="bg-blue-500 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                    Live Updates
-                </span>
+            <div class="text-sm bg-[#00143a] px-4 py-2 rounded border border-blue-900 text-slate-300">
+                Last Updated: <span class="text-white font-bold" id="update-date">Khamis Ini</span>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-5xl mx-auto px-4 py-10">
+    <!-- Main Section -->
+    <main class="max-w-6xl mx-auto px-4 py-8">
         
-        <!-- Title Table -->
-        <div class="border-b-4 border-[#002060] pb-2 mb-6">
-            <h2 class="text-2xl font-extrabold text-[#002060] uppercase tracking-tight">
-                Men's Singles | Current Standings
-            </h2>
+        <!-- BWF Style Category Tabs -->
+        <div class="flex flex-wrap gap-2 mb-6 bg-white p-2 rounded-lg shadow-sm border border-slate-200">
+            <button onclick="switchCategory('mens_singles')" id="btn-mens_singles" class="tab-btn px-5 py-2.5 rounded font-bold text-sm uppercase transition bg-[#002060] text-white">
+                Men's Singles
+            </button>
+            <button onclick="switchCategory('mens_doubles')" id="btn-mens_doubles" class="tab-btn px-5 py-2.5 rounded font-bold text-sm uppercase transition bg-slate-100 text-slate-700 hover:bg-slate-200">
+                Men's Doubles
+            </button>
         </div>
 
-        <!-- Ranking Table -->
+        <!-- Ranking Table Container -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-slate-200">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="bg-[#002060] text-white text-sm uppercase tracking-wider">
+                    <tr class="bg-[#002060] text-white text-xs uppercase tracking-wider border-b border-blue-950">
                         <th class="py-4 px-6 text-center w-24">Rank</th>
-                        <th class="py-4 px-6">Player Name</th>
-                        <th class="py-4 px-6 text-center">Points</th>
+                        <th class="py-4 px-6">Player / Pair</th>
+                        <th class="py-4 px-6 text-center w-40">Points</th>
                         <th class="py-4 px-6 text-center w-36">Recent Form</th>
                     </tr>
                 </thead>
                 <tbody id="ranking-table" class="divide-y divide-slate-200">
-                    <!-- Data dari JS masuk sini -->
+                    <!-- Data masuk guna JS -->
                 </tbody>
             </table>
         </div>
     </main>
 
     <script>
-        // Ambil data dari players.json
+        let globalData = {};
+        let currentCategory = 'mens_singles';
+
+        // Auto letak tarikh hari ini sebagai 'Last Updated'
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('update-date').innerText = new Date().toLocaleDateString('ms-MY', options);
+
+        // Load data dari JSON
         fetch('players.json')
             .then(response => response.json())
             .then(data => {
-                // Susun points paling tinggi ke rendah
-                data.sort((a, b) => b.points - a.points);
-                
-                const tableBody = document.getElementById('ranking-table');
-                tableBody.innerHTML = '';
-
-                data.forEach((player, index) => {
-                    const rank = index + 1;
-                    
-                    // Design khas untuk Top 3 (Petak Biru @ BWF Style)
-                    let rankDisplay = `<span class="bg-[#002060] text-white font-bold px-3 py-1.5 rounded text-base inline-block w-8 text-center">${rank}</span>`;
-                    if (rank > 3) {
-                        rankDisplay = `<span class="text-slate-500 font-bold text-lg px-3">${rank}</span>`;
-                    }
-
-                    const row = `
-                        <tr class="hover:bg-slate-50 transition duration-150">
-                            <td class="py-4 px-6 text-center">${rankDisplay}</td>
-                            <td class="py-4 px-6 font-bold text-slate-800 text-lg">${player.name}</td>
-                            <td class="py-4 px-6 text-center text-blue-600 font-extrabold font-mono text-lg">
-                                ${player.points.toLocaleString()}
-                            </td>
-                            <td class="py-4 px-6 text-center text-sm">${player.form}</td>
-                        </tr>
-                    `;
-                    tableBody.innerHTML += row;
-                });
+                globalData = data;
+                renderTable(currentCategory);
             })
-            .catch(error => console.error('Error load data:', error));
+            .catch(error => console.error('Error loading data:', error));
+
+        // Fungsi susun & paparkan jadual
+        function renderTable(category) {
+            const tableBody = document.getElementById('ranking-table');
+            tableBody.innerHTML = '';
+
+            const players = globalData[category] || [];
+            
+            // Susun points tertinggi ke terendah
+            players.sort((a, b) => b.points - a.points);
+
+            if (players.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="4" class="py-8 text-center text-slate-4xl">Tiada data untuk kategori ini.</td></tr>`;
+                return;
+            }
+
+            players.forEach((player, index) => {
+                const rank = index + 1;
+                
+                // Kotak Biru BWF style untuk Top 3
+                let rankBox = `<span class="bg-[#002060] text-white font-extrabold px-3 py-1.5 rounded inline-block w-9 text-center">${rank}</span>`;
+                if (rank > 3) {
+                    rankBox = `<span class="text-slate-5xl font-bold px-3">${rank}</span>`;
+                }
+
+                const row = `
+                    <tr class="hover:bg-slate-50 transition duration-150">
+                        <td class="py-4 px-6 text-center">${rankBox}</td>
+                        <td class="py-4 px-6 font-bold text-slate-850 text-base md:text-lg">${player.name}</td>
+                        <td class="py-4 px-6 text-center text-blue-600 font-black font-mono text-base md:text-lg">
+                            ${player.points.toLocaleString()}
+                        </td>
+                        <td class="py-4 px-6 text-center text-sm tracking-wide">${player.form}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Fungsi tukar tab kategori
+        function switchCategory(category) {
+            currentCategory = category;
+            
+            // Reset semua warna butang
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-[#002060]', 'text-white');
+                btn.classList.add('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+            });
+
+            // Set warna aktif pada butang pilihan
+            const activeBtn = document.getElementById(`btn-${category}`);
+            activeBtn.classList.remove('bg-slate-100', 'text-slate-700', 'hover:bg-slate-200');
+            activeBtn.classList.add('bg-[#002060]', 'text-white');
+
+            // Render balik data baru
+            renderTable(category);
+        }
     </script>
 </body>
 </html>
